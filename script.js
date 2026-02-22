@@ -6,15 +6,21 @@ const today = new Date();
 const currentMonth = today.getMonth();
 const currentYear = today.getFullYear();
 
-// 1. Fetch Fish Data from NOAA FishWatch API
 async function fetchFishData() {
     try {
-        // Using a CORS proxy because some government APIs have strict CORS headers for local dev
-        const response = await fetch('https://www.fishwatch.gov/api/species');
+        // We wrap the original URL in a proxy service (allorigins)
+        const proxyUrl = 'https://api.allorigins.win/raw?url=';
+        const targetUrl = 'https://www.fishwatch.gov/api/species';
+        
+        const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+        
+        if (!response.ok) throw new Error('Network response was not ok');
+        
         const data = await response.json();
         renderCalendar(data);
     } catch (error) {
-        fishCard.innerHTML = `<p>Error loading fish data. Please try again later.</p>`;
+        console.error("Fetch error:", error);
+        fishCard.innerHTML = `<p>Error loading fish data. The sea is a bit choppy today! (Error: ${error.message})</p>`;
     }
 }
 
