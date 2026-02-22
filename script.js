@@ -47,16 +47,33 @@ function renderCalendar(fishList) {
 }
 
 function displayFish(fish) {
-    // Note: The API provides images in an array under 'Image Gallery'
-    const imageUrl = fish['Image Gallery'] ? fish['Image Gallery'][0]?.src : 'https://via.placeholder.com/300?text=No+Image+Available';
+    // 1. Find the image source
+    let imageUrl = '';
     
+    if (fish['Image Gallery'] && fish['Image Gallery'].length > 0) {
+        imageUrl = fish['Image Gallery'][0].src;
+    } else {
+        // Fallback if the API has no image for this specific fish
+        imageUrl = 'https://via.placeholder.com/400x300?text=No+Fish+Photo+Available';
+    }
+
+    // 2. Update the HTML
     fishCard.innerHTML = `
-        <h3>${fish['Species Name']}</h3>
-        <p><em>${fish['Scientific Name'] || ''}</em></p>
-        <img src="${imageUrl}" alt="${fish['Species Name']}" class="fish-image">
-        <div style="text-align: left; margin-top: 15px;">
-            <p><strong>Habitat:</strong> ${fish['Habitat'] || 'Information not available'}</p>
-            <p><strong>Fact:</strong> ${fish['Quote'] || 'A mysterious dweller of the deep.'}</p>
+        <div class="fish-container">
+            <h3>${fish['Species Name']}</h3>
+            <p style="color: #666;"><em>${fish['Scientific Name'] || 'Scientific name unknown'}</em></p>
+            
+            <div class="image-wrapper">
+                <img src="${imageUrl}" 
+                     alt="${fish['Species Name']}" 
+                     class="fish-image" 
+                     style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+            </div>
+
+            <div class="fish-info" style="text-align: left; margin-top: 20px; line-height: 1.6;">
+                <p><strong>Habitat:</strong> ${fish['Habitat'] || 'Deep in the blue sea...'}</p>
+                <p><strong>Interesting Fact:</strong> ${fish['Quote'] || 'A fascinating specimen of the ocean.'}</p>
+            </div>
         </div>
     `;
 }
