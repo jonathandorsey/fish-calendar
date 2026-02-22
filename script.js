@@ -84,7 +84,6 @@ const fishData = [
     { name: "Longnose Hawkfish", scientific: "Oxycirrhites typus", fact: "Often perches on gorgonian corals waiting for small crustaceans.", image: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Longnose_Hawkfish.jpg", habitat: "Deep Reefs" },
     { name: "Pygmy Seahorse", scientific: "Hippocampus bargibanti", fact: "So small and well-camouflaged it was only discovered by accident.", image: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Pygmy_Seahorse.jpg", habitat: "Sea Fans" },
     { name: "Ribbon Eel", scientific: "Rhinomuraena quaesita", fact: "They change color and gender as they grow older.", image: "https://upload.wikimedia.org/wikipedia/commons/7/7f/Ribbon_Eel.jpg", habitat: "Reef Ledges" }
-];
 
 ];
 
