@@ -8,22 +8,23 @@ const currentYear = today.getFullYear();
 
 async function fetchFishData() {
     try {
-        // We wrap the original URL in a proxy service (allorigins)
-        const proxyUrl = 'https://api.allorigins.win/raw?url=';
-        const targetUrl = 'https://www.fishwatch.gov/api/species';
+        // 1. The Proxy URL
+        const proxy = 'https://api.allorigins.win/raw?url=';
+        // 2. The Target URL + a 'Cache Buster' to force a fresh pull
+        const target = 'https://www.fishwatch.gov/api/species?v=' + Date.now();
         
-        const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+        const response = await fetch(proxy + encodeURIComponent(target));
         
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error('Proxy server is down or slow');
         
         const data = await response.json();
+        console.log("Fish data received successfully!");
         renderCalendar(data);
     } catch (error) {
-        console.error("Fetch error:", error);
-        fishCard.innerHTML = `<p>Error loading fish data. The sea is a bit choppy today! (Error: ${error.message})</p>`;
+        console.error("Detailed Error:", error);
+        fishCard.innerHTML = `<p>The tide is high! Error: ${error.message}. Please try a 'Hard Refresh' (Shift + Reload).</p>`;
     }
 }
-
 function renderCalendar(fishList) {
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     monthYearLabel.innerText = today.toLocaleDateString('default', { month: 'long', year: 'numeric' });
