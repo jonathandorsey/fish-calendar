@@ -1,12 +1,13 @@
+
 const calendarGrid = document.getElementById('calendar-grid');
 const fishCard = document.getElementById('fish-card');
 const monthYearLabel = document.getElementById('current-month-year');
+const prevBtn = document.getElementById('prev-month');
+const nextBtn = document.getElementById('next-month');
 
-const today = new Date();
-const currentMonth = today.getMonth();
-const currentYear = today.getFullYear();
+// This tracks which month the user is currently VIEWING
+let navDate = new Date(); 
 
-// A library of 31 saltwater species (One for every day of the month)
 const fishData = [
     { name: "Blue Tang", scientific: "Paracanthurus hepatus", fact: "They use sharp 'scalpels' near their tail for defense.", image: "https://upload.wikimedia.org/wikipedia/commons/b/be/Paletten-Doktorfisch_m_02.jpg", habitat: "Coral Reefs" },
     { name: "Clownfish", scientific: "Amphiprioninae", fact: "They are all born male and can change their sex to become dominant females.", image: "https://upload.wikimedia.org/wikipedia/commons/f/f6/Common_clownfish_clown_anemonefish_amphiprion_ocellaris.jpg", habitat: "Anemones" },
@@ -85,40 +86,57 @@ const fishData = [
     { name: "Ribbon Eel", scientific: "Rhinomuraena quaesita", fact: "They change color and gender as they grow older.", image: "https://upload.wikimedia.org/wikipedia/commons/7/7f/Ribbon_Eel.jpg", habitat: "Reef Ledges" }
 ];
 
-function renderCalendar() {
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    monthYearLabel.innerText = today.toLocaleDateString('default', { month: 'long', year: 'numeric' });
+];
 
+function renderCalendar() {
+    // Clear the grid first
+    calendarGrid.innerHTML = '';
+    
+    const viewMonth = navDate.getMonth();
+    const viewYear = navDate.getFullYear();
+    
+    // Set the Label (e.g., "February 2026")
+    monthYearLabel.innerText = navDate.toLocaleDateString('default', { month: 'long', year: 'numeric' });
+
+    // Calculate days in month
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    
     for (let i = 1; i <= daysInMonth; i++) {
         const dayCell = document.createElement('div');
         dayCell.classList.add('day-cell');
         
-        // Highlight today
-        if (i === today.getDate()) dayCell.classList.add('today');
+        // Highlight today only if we are viewing the actual current month/year
+        const today = new Date();
+        if (i === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
+            dayCell.classList.add('today');
+        }
+        
         dayCell.innerText = i;
 
-        // MATH MAGIC:
-        // We use (currentMonth * 31) + i to get a unique number for every day of the year.
-        // Then % fishData.length ensures it stays within our list of 31.
-        const dayOfYearIndex = (currentMonth * 31) + (i - 1);
-        const fishIndex = dayOfYearIndex % fishData.length;
-        const fishOfDay = fishData[fishIndex];
+        // Calculate index so the fish stays consistent for that specific date
+        const dayIndex = (viewMonth * 31) + (i - 1);
+        const fishOfDay = fishData[dayIndex % fishData.length];
 
         dayCell.addEventListener('click', () => displayFish(fishOfDay));
         calendarGrid.appendChild(dayCell);
     }
     
-    // Auto-display today's fish on load
-    const todayIndex = (currentMonth * 31) + (today.getDate() - 1);
-    displayFish(fishData[todayIndex % fishData.length]);
+    // Default display: first fish of the month being viewed
+    displayFish(fishData[(viewMonth * 31) % fishData.length]);
 }
 
 function displayFish(fish) {
+    // We add a "timestamp" to the image URL to try and bypass some cache blocks
+    const secureImg = fish.image.replace("http://", "https://");
+    
     fishCard.innerHTML = `
         <div class="fish-container" style="animation: fadeIn 0.5s ease;">
             <h3>${fish.name}</h3>
             <p style="color: #555;"><em>${fish.scientific}</em></p>
-            <img src="${fish.image}" alt="${fish.name}" class="fish-image" style="width:100%; max-height: 400px; object-fit: cover; border-radius:15px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <img src="${secureImg}" 
+                 alt="${fish.name}" 
+                 class="fish-image" 
+                 onerror="this.onerror=null;this.src='https://via.placeholder.com/400x300?text=Image+Temporarily+Unavailable';">
             <div style="text-align: left; margin-top: 20px; background: #f0faff; padding: 15px; border-radius: 10px;">
                 <p><strong>📍 Habitat:</strong> ${fish.habitat}</p>
                 <p><strong>💡 Fun Fact:</strong> ${fish.fact}</p>
@@ -127,4 +145,16 @@ function displayFish(fish) {
     `;
 }
 
+// NAVIGATION LOGIC
+prevBtn.addEventListener('click', () => {
+    navDate.setMonth(navDate.getMonth() - 1);
+    renderCalendar();
+});
+
+nextBtn.addEventListener('click', () => {
+    navDate.setMonth(navDate.getMonth() + 1);
+    renderCalendar();
+});
+
+// Initial Load
 renderCalendar();
