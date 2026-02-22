@@ -1,0 +1,57 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e0f7fa;
+    color: #006064;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.day-cell {
+    padding: 15px;
+    background: #b2ebf2;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.day-cell:hover {
+    background: #4dd0e1;
+    transform: scale(1.05);
+}
+
+.day-cell.today {
+    border: 3px solid #00acc1;
+    font-weight: bold;
+}
+
+.fish-display {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    min-height: 300px;
+}
+
+.fish-image {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
