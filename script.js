@@ -8,23 +8,33 @@ const currentYear = today.getFullYear();
 
 async function fetchFishData() {
     try {
-        // 1. The Proxy URL
-        const proxy = 'https://api.allorigins.win/raw?url=';
-        // 2. The Target URL + a 'Cache Buster' to force a fresh pull
-        const target = 'https://www.fishwatch.gov/api/species?v=' + Date.now();
+        // We use corsproxy.io - it's often more reliable for NOAA
+        const targetUrl = 'https://www.fishwatch.gov/api/species';
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
         
-        const response = await fetch(proxy + encodeURIComponent(target));
+        const response = await fetch(proxyUrl);
+
+        // check if the response is actually a webpage (HTML) instead of data
+        const text = await response.text();
         
-        if (!response.ok) throw new Error('Proxy server is down or slow');
-        
-        const data = await response.json();
-        console.log("Fish data received successfully!");
+        if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+            throw new Error("The Fish API is currently sending back a webpage instead of data. It might be down for maintenance.");
+        }
+
+        // If it looks like real data, parse it
+        const data = JSON.parse(text);
+        console.log("Fish data loaded successfully!");
         renderCalendar(data);
+
     } catch (error) {
         console.error("Detailed Error:", error);
-        fishCard.innerHTML = `<p>The tide is high! Error: ${error.message}. Please try a 'Hard Refresh' (Shift + Reload).</p>`;
+        fishCard.innerHTML = `
+            <p>The tide is high! (Error: ${error.message})</p>
+            <p><small>The government server might be busy. Try again in 5 minutes!</small></p>
+        `;
     }
 }
+
 function renderCalendar(fishList) {
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     monthYearLabel.innerText = today.toLocaleDateString('default', { month: 'long', year: 'numeric' });
