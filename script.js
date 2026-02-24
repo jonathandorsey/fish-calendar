@@ -103,25 +103,51 @@ function renderCalendar() {
     for (let i = 1; i <= daysInMonth; i++) {
         const dayCell = document.createElement('div');
         dayCell.classList.add('day-cell');
-        
-        // Highlight today only if we are viewing the actual current month/year
-        const today = new Date();
-        if (i === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
+    
+        // 1. Mark 'today' (Static)
+        const realToday = new Date();
+        if (i === realToday.getDate() && viewMonth === realToday.getMonth() && viewYear === realToday.getFullYear()) {
             dayCell.classList.add('today');
         }
-        
+    
         dayCell.innerText = i;
 
-        // Calculate index so the fish stays consistent for that specific date
+        // 2. Identify the fish
         const dayIndex = (viewMonth * 31) + (i - 1);
         const fishOfDay = fishData[dayIndex % fishData.length];
 
-        dayCell.addEventListener('click', () => displayFish(fishOfDay));
+        // 3. Click Event
+        dayCell.addEventListener('click', function() {
+            // Remove 'selected' class from any other cell
+            const previousSelected = document.querySelector('.day-cell.selected');
+            if (previousSelected) {
+                previousSelected.classList.remove('selected');
+            }
+        
+            // Add 'selected' class to the one we just clicked
+            dayCell.classList.add('selected');
+        
+            // Show the fish
+            displayFish(fishOfDay);
+        });
+
         calendarGrid.appendChild(dayCell);
     }
     
     // Default display: first fish of the month being viewed
     displayFish(fishData[(viewMonth * 31) % fishData.length]);
+
+    const allCells = document.querySelectorAll('.day-cell');
+const todayDate = new Date().getDate();
+
+    // If we are looking at the current month, auto-select the 'today' cell
+    if (navDate.getMonth() === new Date().getMonth() && navDate.getFullYear() === new Date().getFullYear()) {
+        allCells.forEach(cell => {
+            if (parseInt(cell.innerText) === todayDate) {
+                cell.classList.add('selected');
+            }
+        });
+    }
 }
 
 function displayFish(fish) {
