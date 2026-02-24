@@ -138,7 +138,7 @@ function renderCalendar() {
     displayFish(fishData[(viewMonth * 31) % fishData.length]);
 
     const allCells = document.querySelectorAll('.day-cell');
-const todayDate = new Date().getDate();
+    const todayDate = new Date().getDate();
 
     // If we are looking at the current month, auto-select the 'today' cell
     if (navDate.getMonth() === new Date().getMonth() && navDate.getFullYear() === new Date().getFullYear()) {
@@ -150,7 +150,6 @@ const todayDate = new Date().getDate();
     }
 
     // --- Default Selection Logic ---
-    const allCells = document.querySelectorAll('.day-cell');
     const today = new Date();
     
     // Check if we are currently viewing the real-world current month and year
