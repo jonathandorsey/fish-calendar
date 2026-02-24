@@ -9,8 +9,8 @@ const nextBtn = document.getElementById('next-month');
 let navDate = new Date(); 
 
 const fishData = [
-    { name: "Blue Tang", scientific: "Paracanthurus hepatus", fact: "They use sharp 'scalpels' near their tail for defense.", image: "https://upload.wikimedia.org/wikipedia/commons/b/be/Paletten-Doktorfisch_m_02.jpg", habitat: "Coral Reefs" },
-    { name: "Clownfish", scientific: "Amphiprioninae", fact: "They are all born male and can change their sex to become dominant females.", image: "https://upload.wikimedia.org/wikipedia/commons/f/f6/Common_clownfish_clown_anemonefish_amphiprion_ocellaris.jpg", habitat: "Anemones" },
+    { name: "Blue Tang", scientific: "Paracanthurus hepatus", fact: "They use sharp 'scalpels' near their tail for defense.", image: "images/blue-tang.JPG", habitat: "Coral Reefs" },
+    { name: "Clownfish", scientific: "Amphiprioninae", fact: "They are all born male and can change their sex to become dominant females.", image: "images/clownish.jpg", habitat: "Anemones" },
     { name: "Great White Shark", scientific: "Carcharodon carcharias", fact: "They can detect a single drop of blood in 25 gallons of water.", image: "https://upload.wikimedia.org/wikipedia/commons/5/56/White_shark.jpg", habitat: "Open Ocean" },
     { name: "Moorish Idol", scientific: "Zanclus cornutus", fact: "They are notoriously difficult to keep in aquariums due to their diet.", image: "https://upload.wikimedia.org/wikipedia/commons/e/e9/Moorish_Idol_Fish_in_Kona.jpg", habitat: "Subtropical Reefs" },
     { name: "Lionfish", scientific: "Pterois", fact: "Though beautiful, they are a highly invasive species in the Atlantic.", image: "https://upload.wikimedia.org/wikipedia/commons/b/bf/Pterois_volitans_Manado_clean.jpg", habitat: "Indo-Pacific" },
@@ -62,9 +62,9 @@ const fishData = [
     { name: "Banggai Cardinalfish", scientific: "Pterapogon kauderni", fact: "The male carries the eggs in his mouth until they hatch.", image: "https://upload.wikimedia.org/wikipedia/commons/b/bc/Banggai_Cardinalfish.jpg", habitat: "Banggai Islands" },
     { name: "Firefish Goby", scientific: "Nemateleotris magnifica", fact: "They use their long dorsal fin to 'lock' themselves into crevices.", image: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Firefish_Goby.jpg", habitat: "Reef Ledges" },
     { name: "Yellow Watchman Goby", scientific: "Cryptocentrus cinctus", fact: "Often shares a burrow with a snapping shrimp.", image: "https://upload.wikimedia.org/wikipedia/commons/7/79/Yellow_Watchman_Goby.jpg", habitat: "Sandy Reef Bottoms" },
-    { name: "Blue-Spotted Ribbon Tail Ray", scientific: "Taeniura lymma", fact: "They rarely bury themselves in sand, unlike other rays.", image: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Bluespotted_Ribbontail_Ray.jpg", habitat: "Coral Reefs" },
-    { name: "Zebra Shark", scientific: "Stegostoma tigrinum", fact: "Adults have spots, but juveniles have stripes, hence the name.", image: "https://upload.wikimedia.org/wikipedia/commons/6/6b/Zebra_Shark.jpg", habitat: "Tropical Waters" },
-    { name: "Giant Moray Eel", scientific: "Gymnothorax javanicus", fact: "They often hunt cooperatively with roving coral groupers.", image: "https://upload.wikimedia.org/wikipedia/commons/c/cc/Giant_moray_eel.jpg", habitat: "Reef Slopes" },
+    { name: "Blue-Spotted Ribbon Tail Ray", scientific: "Taeniura lymma", fact: "They rarely bury themselves in sand, unlike other rays.", image: "images/blue-spotted-ray.jpg", habitat: "Coral Reefs" },
+    { name: "Zebra Shark", scientific: "Stegostoma tigrinum", fact: "Adults have spots, but juveniles have stripes, hence the name.", image: "images/zebra-shark.png", habitat: "Tropical Waters" },
+    { name: "Giant Moray Eel", scientific: "Gymnothorax javanicus", fact: "They often hunt cooperatively with roving coral groupers.", image: "images/giant-moray.jpg", habitat: "Reef Slopes" },
     { name: "Porcupinefish", scientific: "Diodontidae", fact: "They can inflate their bodies with water or air to appear larger.", image: "https://upload.wikimedia.org/wikipedia/commons/7/77/Porcupinefish.jpg", habitat: "Tropical Reefs" },
     { name: "Garden Eel", scientific: "Heterocongrinae", fact: "They live in colonies in burrows, swaying like seagrass.", image: "https://upload.wikimedia.org/wikipedia/commons/f/f3/Garden_Eels.jpg", habitat: "Sandy Flats" },
     { name: "Pacific Cleaner Wrasse", scientific: "Labroides phthirophagus", fact: "They set up 'cleaning stations' where other fish wait for a check-up.", image: "https://upload.wikimedia.org/wikipedia/commons/0/09/Cleaner_Wrasse.jpg", habitat: "Reef Edges" },
