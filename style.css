@@ -17,12 +17,11 @@ body {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 8px;
     background: white;
     padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 0 0 15px 15px; /* Rounded bottom corners only */
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
 }
 
 .day-cell {
@@ -61,7 +60,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: white; /* Matches the grid background */
+    padding: 15px 20px;
+    border-radius: 15px 15px 0 0; /* Rounded top corners only */
+    border-bottom: 1px solid #f0f0f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Softer shadow */
 }
 
 button {
@@ -110,6 +113,26 @@ button:hover {
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+#prev-month, #next-month {
+    background-color: #e0f7fa;
+    color: #00838f;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+#prev-month:hover, #next-month:hover {
+    background-color: #00acc1;
+    color: white;
 }
 
 /* MOBILE RESPONSIVENESS */
