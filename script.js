@@ -10,7 +10,7 @@ let navDate = new Date();
 
 const fishData = [
     { name: "Blue Tang", scientific: "Paracanthurus hepatus", fact: "They use sharp 'scalpels' near their tail for defense.", image: "images/blue-tang.JPG", habitat: "Coral Reefs" },
-    { name: "Clownfish", scientific: "Amphiprioninae", fact: "They are all born male and can change their sex to become dominant females.", image: "images/clownish.jpg", habitat: "Anemones" },
+    { name: "Clownfish", scientific: "Amphiprioninae", fact: "They are all born male and can change their sex to become dominant females.", image: "images/clownfish.jpg", habitat: "Anemones" },
     { name: "Great White Shark", scientific: "Carcharodon carcharias", fact: "They can detect a single drop of blood in 25 gallons of water.", image: "https://upload.wikimedia.org/wikipedia/commons/5/56/White_shark.jpg", habitat: "Open Ocean" },
     { name: "Moorish Idol", scientific: "Zanclus cornutus", fact: "They are notoriously difficult to keep in aquariums due to their diet.", image: "https://upload.wikimedia.org/wikipedia/commons/e/e9/Moorish_Idol_Fish_in_Kona.jpg", habitat: "Subtropical Reefs" },
     { name: "Lionfish", scientific: "Pterois", fact: "Though beautiful, they are a highly invasive species in the Atlantic.", image: "https://upload.wikimedia.org/wikipedia/commons/b/bf/Pterois_volitans_Manado_clean.jpg", habitat: "Indo-Pacific" },
