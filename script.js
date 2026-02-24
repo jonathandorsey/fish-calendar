@@ -151,17 +151,18 @@ const todayDate = new Date().getDate();
 }
 
 function displayFish(fish) {
-    // We add a "timestamp" to the image URL to try and bypass some cache blocks
-    const secureImg = fish.image.replace("http://", "https://");
-    
+    if (!fishCard) return;
+
     fishCard.innerHTML = `
         <div class="fish-container" style="animation: fadeIn 0.5s ease;">
-            <h3>${fish.name}</h3>
+            <h2 style="margin-top: 0;">${fish.name}</h2> 
             <p style="color: #555;"><em>${fish.scientific}</em></p>
-            <img src="${secureImg}" 
+            
+            <img src="${fish.image}" 
                  alt="${fish.name}" 
                  class="fish-image" 
-                 onerror="this.onerror=null;this.src='https://via.placeholder.com/400x300?text=Image+Temporarily+Unavailable';">
+                 onerror="this.src='images/default-fish.jpg';"> 
+            
             <div style="text-align: left; margin-top: 20px; background: #f0faff; padding: 15px; border-radius: 10px;">
                 <p><strong>📍 Habitat:</strong> ${fish.habitat}</p>
                 <p><strong>💡 Fun Fact:</strong> ${fish.fact}</p>
