@@ -148,6 +148,29 @@ const todayDate = new Date().getDate();
             }
         });
     }
+
+    // --- Default Selection Logic ---
+    const allCells = document.querySelectorAll('.day-cell');
+    const today = new Date();
+    
+    // Check if we are currently viewing the real-world current month and year
+    if (navDate.getMonth() === today.getMonth() && navDate.getFullYear() === today.getFullYear()) {
+        const todayDate = today.getDate();
+        
+        allCells.forEach(cell => {
+            if (parseInt(cell.innerText) === todayDate) {
+                // 1. Add the visual highlight
+                cell.classList.add('selected');
+                
+                // 2. Calculate which fish belongs to today
+                const dayIndex = (today.getMonth() * 31) + (todayDate - 1);
+                const fishOfToday = fishData[dayIndex % fishData.length];
+                
+                // 3. Display today's fish automatically
+                displayFish(fishOfToday);
+            }
+        });
+    }
 }
 
 function displayFish(fish) {
