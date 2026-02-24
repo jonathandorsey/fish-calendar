@@ -84,3 +84,49 @@ button:hover {
     border-radius: 10px;
     margin-top: 10px;
 }
+
+/* The main container holding both sides */
+.app-layout {
+    display: flex;
+    gap: 30px; /* Space between calendar and fish */
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Left Side: The Calendar */
+.calendar-section {
+    flex: 1.5; /* Takes up 1.5 parts of the width */
+    min-width: 400px;
+}
+
+/* Right Side: The Fish Card */
+.display-section {
+    flex: 1; /* Takes up 1 part of the width */
+    position: sticky; /* Keeps the fish card visible as you scroll */
+    top: 20px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 850px) {
+    .app-layout {
+        flex-direction: column; /* Stacks them on small screens */
+    }
+    
+    .calendar-section, .display-section {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+/* Ensure the grid stays a grid inside its section */
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
