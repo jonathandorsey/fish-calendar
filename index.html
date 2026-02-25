@@ -3,20 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fish of the Day</title> <link rel="stylesheet" href="style.css">
+    <title>Fish of the Day - Ocean Edition</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <audio id="wave-sound" loop>
+        <source src="audio/ocean-waves.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="ocean-background">
+        <svg class="waves" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#1e90ff;stop-opacity:0.3" />
+                    <stop offset="100%" style="stop-color:#000080;stop-opacity:0.8" />
+                </linearGradient>
+            </defs>
+            <path class="wave wave1" d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="url(#grad1)" />
+            <path class="wave wave2" d="M0,55 Q300,10 600,55 T1200,55 L1200,120 L0,120 Z" fill="#1e90ff" opacity="0.5" />
+            <path class="wave wave3" d="M0,60 Q300,20 600,60 T1200,60 L1200,120 L0,120 Z" fill="#00bfff" opacity="0.3" />
+        </svg>
+    </div>
+
     <div class="container">
         <header>
-            <h1>Fish of the Day</h1> </header>
+            <h1>🐠 Fish of the Day - Ocean Edition 🐙</h1>
+            <p class="subtitle">Discover a different fish every day!</p>
+        </header>
 
         <main class="app-layout">
             
             <section class="calendar-section">
                <div class="calendar-header">
-                    <button id="prev-month">&lt; Prev</button>
+                    <button id="prev-month" class="nav-btn">&lt; Prev</button>
                     <h2 id="current-month-year"></h2>
-                    <button id="next-month">Next &gt;</button>
+                    <button id="next-month" class="nav-btn">Next &gt;</button>
+                    <button id="toggle-sound" class="sound-btn">🔊 Sound On</button>
                 </div>
                 
                 <div id="calendar-grid" class="calendar-grid"></div>
@@ -24,7 +46,7 @@
             
             <section class="display-section">
                 <div id="fish-display" class="fish-display">
-                    <div id="fish-card">
+                    <div id="fish-card" class="fish-card">
                         <p>Select a date to see the catch!</p>
                     </div>
                 </div>
@@ -32,6 +54,7 @@
 
         </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
