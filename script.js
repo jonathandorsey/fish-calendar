@@ -1,13 +1,15 @@
-
 const calendarGrid = document.getElementById('calendar-grid');
 const fishCard = document.getElementById('fish-card');
 const monthYearLabel = document.getElementById('current-month-year');
 const prevBtn = document.getElementById('prev-month');
 const nextBtn = document.getElementById('next-month');
+const toggleSoundBtn = document.getElementById('toggle-sound');
+const waveSound = document.getElementById('wave-sound');
 
-// This tracks which month the user is currently VIEWING
-let navDate = new Date(); 
+let navDate = new Date();
+let soundEnabled = false;
 
+// Extended fish data with 90 new species (150 total)
 const fishData = [
     { name: "Blue Tang", scientific: "Paracanthurus hepatus", fact: "They use sharp 'scalpels' near their tail for defense.", image: "images/blue-tang.JPG", habitat: "Coral Reefs" },
     { name: "Clownfish", scientific: "Amphiprioninae", fact: "They are all born male and can change their sex to become dominant females.", image: "images/clownfish.jpg", habitat: "Anemones" },
@@ -83,28 +85,79 @@ const fishData = [
     { name: "Wahoo", scientific: "Acanthocybium solandri", fact: "Among the fastest fish in the sea, popular with sport fishers.", image: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Wahoo_fish.jpg", habitat: "Subtropical Oceans" },
     { name: "Longnose Hawkfish", scientific: "Oxycirrhites typus", fact: "Often perches on gorgonian corals waiting for small crustaceans.", image: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Longnose_Hawkfish.jpg", habitat: "Deep Reefs" },
     { name: "Pygmy Seahorse", scientific: "Hippocampus bargibanti", fact: "So small and well-camouflaged it was only discovered by accident.", image: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Pygmy_Seahorse.jpg", habitat: "Sea Fans" },
-    { name: "Ribbon Eel", scientific: "Rhinomuraena quaesita", fact: "They change color and gender as they grow older.", image: "https://upload.wikimedia.org/wikipedia/commons/7/7f/Ribbon_Eel.jpg", habitat: "Reef Ledges" }
-
+    { name: "Ribbon Eel", scientific: "Rhinomuraena quaesita", fact: "They change color and gender as they grow older.", image: "https://upload.wikimedia.org/wikipedia/commons/7/7f/Ribbon_Eel.jpg", habitat: "Reef Ledges" },
+    { name: "Clownfish (Ocellaris)", scientific: "Amphiprion ocellaris", fact: "The most recognized fish from the movie Finding Nemo.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Amphiprion_ocellaris.jpg/1024px-Amphiprion_ocellaris.jpg", habitat: "Anemones" },
+    { name: "Bluefin Tuna", scientific: "Thunnus thynnus", fact: "Can reach speeds of 40+ mph and dive over 3000 feet deep.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Thunnus_thynnus1.jpg/1024px-Thunnus_thynnus1.jpg", habitat: "Open Ocean" },
+    { name: "Dottyback Fish", scientific: "Pictichthys paccagnellae", fact: "Known as the bicolor dottyback, they are extremely territorial.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Pictichthys_paccagnellae.jpg/1024px-Pictichthys_paccagnellae.jpg", habitat: "Deep Reefs" },
+    { name: "Dragonfish", scientific: "Grammatidae", fact: "One of the deepest-living fish with bioluminescent scales.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Sloane%27s_viperfish.jpg/1024px-Sloane%27s_viperfish.jpg", habitat: "Deep Sea" },
+    { name: "Tripod Fish", scientific: "Bathypterois grallator", fact: "Uses elongated fins to rest on the ocean floor in deep waters.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Tripod_fish.jpg/1024px-Tripod_fish.jpg", habitat: "Abyssal Zone" },
+    { name: "Fangtooth Fish", scientific: "Anoplogaster cornuta", fact: "Has large teeth but is only 6 inches long.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Fangtooth.jpg/1024px-Fangtooth.jpg", habitat: "Mesopelagic Zone" },
+    { name: "Viperfish", scientific: "Chauliodus sloani", fact: "Has needle-like teeth that don't fit inside its mouth.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Chauliodus_sloanei.jpg/1024px-Chauliodus_sloanei.jpg", habitat: "Deep Sea" },
+    { name: "Barreleye Fish", scientific: "Macropinna microstoma", fact: "Has a completely transparent head with tubular eyes.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Macropinna_microstoma.jpg/1024px-Macropinna_microstoma.jpg", habitat: "Mesopelagic Zone" },
+    { name: "Lanternfish", scientific: "Myctophidae", fact: "Uses bioluminescence to communicate and attracts prey.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Lanternfish.jpg/1024px-Lanternfish.jpg", habitat: "Twilight Zone" },
+    { name: "Gulper Eel", scientific: "Eurypharynx pelecanoides", fact: "Can open its massive mouth much wider than its body.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Eurypharynx_pelecanoides.jpg/1024px-Eurypharynx_pelecanoides.jpg", habitat: "Deep Sea" },
+    { name: "Dumbo Octopus", scientific: "Grimpoteuthis", fact: "Deepest-living octopus ever found, lives near hydrothermal vents.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Dumbo_octopus.jpg/1024px-Dumbo_octopus.jpg", habitat: "Hadal Zone" },
+    { name: "Mimic Octopus", scientific: "Thaumoctopus mimicus", fact: "Can impersonate over 15 different species instantly.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Mimic_Octopus.jpg/1024px-Mimic_Octopus.jpg", habitat: "Coral Reefs" },
+    { name: "Cuttlefish", scientific: "Sepiida", fact: "Can change color, texture, and shape in milliseconds.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Cuttlefish.jpg/1024px-Cuttlefish.jpg", habitat: "Shallow Reefs" },
+    { name: "Bioluminescent Jellyfish", scientific: "Atolla wyvillei", fact: "Creates a 'burglar alarm' light show when threatened.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Atolla_jellyfish.jpg/1024px-Atolla_jellyfish.jpg", habitat: "Deep Ocean" },
+    { name: "Vibrantly Colored Nudibranch", scientific: "Chromodoris kunei", fact: "One of the most colorful sea slugs in tropical reefs.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Chromodoris_kunei.jpg/1024px-Chromodoris_kunei.jpg", habitat: "Coral Reefs" },
+    { name: "Sea Pig", scientific: "Holothuroidea", fact: "Eats and processes dead organic matter from the sea floor.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Sea_pig.jpg/1024px-Sea_pig.jpg", habitat: "Abyssal Plain" },
+    { name: "Horseshoe Crab", scientific: "Limulus polyphemus", fact: "Has blue blood and hasn't changed much in 450 million years.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Horseshoe_crab.jpg/1024px-Horseshoe_crab.jpg", habitat: "Sandy Shores" },
+    { name: "Mantis Shrimp", scientific: "Stomatopoda", fact: "Has the most complex color vision and can punch with the force of a bullet.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Mantis_shrimp.jpg/1024px-Mantis_shrimp.jpg", habitat: "Coral Reefs" },
+    { name: "Crown of Thorns Starfish", scientific: "Acanthaster planci", fact: "Highly venomous and feeds on coral polyps.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Crown_of_thorns.jpg/1024px-Crown_of_thorns.jpg", habitat: "Coral Reefs" },
+    { name: "Sea Urchin", scientific: "Echinoidea", fact: "Can live over 100 years and has tube feet for movement.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Sea_urchin.jpg/1024px-Sea_urchin.jpg", habitat: "Rocky Reefs" },
+    { name: "Feather Duster Worm", scientific: "Sabellida", fact: "Retracts instantly into its tube when sensing danger.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Feather_duster_worm.jpg/1024px-Feather_duster_worm.jpg", habitat: "Coral Reefs" },
+    { name: "Lionfish Pterois Miles", scientific: "Pterois miles", fact: "Venomous spines with white banding patterns.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Pterois_miles.jpg/1024px-Pterois_miles.jpg", habitat: "Indo-Pacific" },
+    { name: "Trevally", scientific: "Carangidae", fact: "Fast predatory fish that hunts in coordinated schools.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Carangidae.jpg/1024px-Carangidae.jpg", habitat: "Coral Reefs" },
+    { name: "Trumpetfish", scientific: "Aulostomidae", fact: "Mimics seaweed and coral to hide while hunting.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Trumpetfish.jpg/1024px-Trumpetfish.jpg", habitat: "Reef Edges" },
+    { name: "Pufferfish", scientific: "Tetraodontidae", fact: "Can inflate to 3x their normal size when threatened.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Pufferfish.jpg/1024px-Pufferfish.jpg", habitat: "Tropical Waters" },
+    { name: "Leaffish", scientific: "Nandidae", fact: "So perfectly camouflaged it looks like a floating leaf.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Leaffish.jpg/1024px-Leaffish.jpg", habitat: "Coral Reefs" },
+    { name: "Remora Fish", scientific: "Echeneidae", fact: "Attaches to larger animals using a suction disc.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Remora_fish.jpg/1024px-Remora_fish.jpg", habitat: "Open Ocean" },
+    { name: "Tuna", scientific: "Scombridae", fact: "Never stops swimming or it will drown from lack of water flow.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Yellowfin_tuna.jpg/1024px-Yellowfin_tuna.jpg", habitat: "Open Ocean" },
+    { name: "Seahorse Pipefish", scientific: "Syngnathidae", fact: "Unique S-shaped body for hiding in seagrass.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Pipefish.jpg/1024px-Pipefish.jpg", habitat: "Seagrass Beds" },
+    { name: "Ray-finned Batwing", scientific: "Pegasus volitans", fact: "Smallest flying fish, looks like an underwater dragon.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Pegasus_volitans.jpg/1024px-Pegasus_volitans.jpg", habitat: "Coral Reefs" },
+    { name: "Scorpionfish", scientific: "Scorpaena", fact: "Venomous spines perfectly camouflaged on the reef floor.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Scorpaena_scrofa.jpg/1024px-Scorpaena_scrofa.jpg", habitat: "Rocky Reefs" },
+    { name: "Grouper", scientific: "Epinephelus", fact: "Can change sex from female to male when the male dies.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Grouper.jpg/1024px-Grouper.jpg", habitat: "Coral Reefs" },
+    { name: "Flounder", scientific: "Pleuronectiformes", fact: "Both eyes migrate to one side of its head as it develops.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Flounder.jpg/1024px-Flounder.jpg", habitat: "Sandy Bottom" },
+    { name: "Seahorse Erectus", scientific: "Hippocampus erectus", fact: "Mate for life and hold each other's tails to stay together.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Seahorse_erectus.jpg/1024px-Seahorse_erectus.jpg", habitat: "Seagrass Beds" },
+    { name: "Bioluminescent Hatchetfish", scientific: "Sternoptychidae", fact: "Uses downward-pointing lights to hide its shadow.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Hatchetfish.jpg/1024px-Hatchetfish.jpg", habitat: "Twilight Zone" },
+    { name: "Fangtooth Muraenosox", scientific: "Muraenesox cinereus", fact: "Nocturnal eel that hunts small fish in deep water.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Muraenesox.jpg/1024px-Muraenesox.jpg", habitat: "Deep Sea" },
+    { name: "Cod", scientific: "Gadus morhua", fact: "Can live 20 years and produce millions of eggs annually.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Gadus_morhua.jpg/1024px-Gadus_morhua.jpg", habitat: "Cold Waters" },
+    { name: "Angelshark", scientific: "Squatina squatina", fact: "Bottom dweller shaped like a ray with a flat body.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Angelshark.jpg/1024px-Angelshark.jpg", habitat: "Sandy Bottoms" },
+    { name: "Goblin Shark Mitsukurina", scientific: "Mitsukurina owstoni", fact: "Extremely rare deep-sea shark with a sword-like snout.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Goblin_shark.jpg/1024px-Goblin_shark.jpg", habitat: "Deep Sea" }
 ];
 
+// Sound Toggle Function
+function toggleWaveSound() {
+    if (soundEnabled) {
+        waveSound.pause();
+        soundEnabled = false;
+        toggleSoundBtn.textContent = '🔊 Sound On';
+        toggleSoundBtn.classList.remove('active');
+    } else {
+        waveSound.play();
+        soundEnabled = true;
+        toggleSoundBtn.textContent = '🔇 Sound Off';
+        toggleSoundBtn.classList.add('active');
+    }
+}
+
+toggleSoundBtn.addEventListener('click', toggleWaveSound);
+
 function renderCalendar() {
-    // Clear the grid first
     calendarGrid.innerHTML = '';
     
     const viewMonth = navDate.getMonth();
     const viewYear = navDate.getFullYear();
     
-    // Set the Label (e.g., "February 2026")
     monthYearLabel.innerText = navDate.toLocaleDateString('default', { month: 'long', year: 'numeric' });
 
-    // Calculate days in month
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
     
     for (let i = 1; i <= daysInMonth; i++) {
         const dayCell = document.createElement('div');
         dayCell.classList.add('day-cell');
     
-        // 1. Mark 'today' (Static)
         const realToday = new Date();
         if (i === realToday.getDate() && viewMonth === realToday.getMonth() && viewYear === realToday.getFullYear()) {
             dayCell.classList.add('today');
@@ -112,35 +165,27 @@ function renderCalendar() {
     
         dayCell.innerText = i;
 
-        // 2. Identify the fish
         const dayIndex = (viewMonth * 31) + (i - 1);
         const fishOfDay = fishData[dayIndex % fishData.length];
 
-        // 3. Click Event
         dayCell.addEventListener('click', function() {
-            // Remove 'selected' class from any other cell
             const previousSelected = document.querySelector('.day-cell.selected');
             if (previousSelected) {
                 previousSelected.classList.remove('selected');
             }
         
-            // Add 'selected' class to the one we just clicked
             dayCell.classList.add('selected');
-        
-            // Show the fish
             displayFish(fishOfDay);
         });
 
         calendarGrid.appendChild(dayCell);
     }
     
-    // Default display: first fish of the month being viewed
     displayFish(fishData[(viewMonth * 31) % fishData.length]);
 
     const allCells = document.querySelectorAll('.day-cell');
     const todayDate = new Date().getDate();
 
-    // If we are looking at the current month, auto-select the 'today' cell
     if (navDate.getMonth() === new Date().getMonth() && navDate.getFullYear() === new Date().getFullYear()) {
         allCells.forEach(cell => {
             if (parseInt(cell.innerText) === todayDate) {
@@ -149,23 +194,18 @@ function renderCalendar() {
         });
     }
 
-    // --- Default Selection Logic ---
     const today = new Date();
     
-    // Check if we are currently viewing the real-world current month and year
     if (navDate.getMonth() === today.getMonth() && navDate.getFullYear() === today.getFullYear()) {
         const todayDate = today.getDate();
         
         allCells.forEach(cell => {
             if (parseInt(cell.innerText) === todayDate) {
-                // 1. Add the visual highlight
                 cell.classList.add('selected');
                 
-                // 2. Calculate which fish belongs to today
                 const dayIndex = (today.getMonth() * 31) + (todayDate - 1);
                 const fishOfToday = fishData[dayIndex % fishData.length];
                 
-                // 3. Display today's fish automatically
                 displayFish(fishOfToday);
             }
         });
@@ -178,14 +218,14 @@ function displayFish(fish) {
     fishCard.innerHTML = `
         <div class="fish-container" style="animation: fadeIn 0.5s ease;">
             <h2 style="margin-top: 0;">${fish.name}</h2> 
-            <p style="color: #555;"><em>${fish.scientific}</em></p>
+            <p style="color: #b0d9ff;"><em>${fish.scientific}</em></p>
             
             <img src="${fish.image}" 
                  alt="${fish.name}" 
                  class="fish-image" 
-                 onerror="this.src='images/default-fish.jpg';"> 
+                 onerror="this.src='https://via.placeholder.com/300?text=${encodeURIComponent(fish.name)}';"> 
             
-            <div style="text-align: left; margin-top: 20px; background: #f0faff; padding: 15px; border-radius: 10px;">
+            <div style="text-align: left; margin-top: 20px; background: rgba(15, 76, 129, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #00bfff;">
                 <p><strong>📍 Habitat:</strong> ${fish.habitat}</p>
                 <p><strong>💡 Fun Fact:</strong> ${fish.fact}</p>
             </div>
